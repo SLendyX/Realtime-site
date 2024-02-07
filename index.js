@@ -9,9 +9,6 @@ const app = initializeApp(appSettings)
 const database = getDatabase(app)
 const endorsementListInDB = ref(database, "endorsmentList")
 
-const likesInDB = ref(database, "likeList");
-
-
 
 const inputField = document.getElementById("input-area")
 const publishBtn = document.getElementById("publish-btn")
@@ -23,34 +20,16 @@ const heartIcon = `<svg width="20" height="17" viewBox="0 0 15 13" xmlns="http:/
 </svg>
 `
 
-correspondantEls[0].value = "From";
-correspondantEls[1].value = "To"
-
-inputField.addEventListener("click", function(){
-    let text = inputField.value
-    if(text === "Write your endorsement here")
-        inputField.value = ""
-})
-
-for(let i=0; i< correspondantEls.length; i++)
-    correspondantEls[i].addEventListener("click", function(){
-        let text = correspondantEls[i].value;
-        if(text === "From" || text === "To")
-            correspondantEls[i].value = "";
-
-    })
-
 publishBtn.addEventListener("click", function(){
     let textValue = inputField.value;
     let correspondantsArray = []
     correspondantsArray.push(correspondantEls[0].value)
     correspondantsArray.push(correspondantEls[1].value)
 
-    let textInDB = `<p id="liheader"><b>${correspondantsArray[0]}</b></p>${textValue}<p id="lifooter"><b>${correspondantsArray[1]}</b><span id="0">${heartIcon}</span></p>` 
+    let textInDB = `<p id="liheader"><b>From ${correspondantsArray[0]}</b></p>${textValue}<p id="lifooter"><b>To ${correspondantsArray[1]}</b><span id="0">${heartIcon}</span></p>` 
 
     push(endorsementListInDB, textInDB)
     push(endorsementListInDB, '0')
-    push(endorsementListInDB, 'black')
 
     clearInputField();
 })
@@ -61,12 +40,11 @@ onValue(endorsementListInDB, function(snapshot) {
         let itemsArray = Object.entries(snapshot.val())
         console.log("Change")
 
-        for (let i = 0; i < itemsArray.length-2; i+=3) {
+        for (let i = 0; i < itemsArray.length-1; i+=2) {
             let currentItem = itemsArray[i]
             let currentLike = itemsArray[i+1];
-            let currentColor = itemsArray[i+2]
         
-            appendItemToEndorsementListEl(currentItem, currentLike, currentColor)
+            appendItemToEndorsementListEl(currentItem, currentLike)
             
         }   
     }
@@ -75,9 +53,9 @@ onValue(endorsementListInDB, function(snapshot) {
 
 
 function clearInputField(){
-    inputField.value = "Write your endorsement here";
-    correspondantEls[0].value = "From";
-    correspondantEls[1].value = "To"
+    inputField.value = "";
+    correspondantEls[0].value = "";
+    correspondantEls[1].value = ""
 }
 
 
@@ -86,15 +64,12 @@ function clearEndorsementList(){
 }
 
 
-function appendItemToEndorsementListEl(item, like, color){
+function appendItemToEndorsementListEl(item, like){
     const itemID = item[0]
     const itemValue = item[1]
 
     const likeID = like[0]
     const likeValue = like[1];
-
-    const colorID = color[0];
-    const colorValue = color[1];
 
     const newEl = document.createElement("li")
     newEl.innerHTML = itemValue;
@@ -108,7 +83,11 @@ function appendItemToEndorsementListEl(item, like, color){
     heartSvg.id = likeID;
 
     heart.style.cursor="pointer"
-    heartSvg.style.fill = colorValue;
+   
+    if(JSON.parse(localStorage.getItem(likeID)))
+        heartSvg.style.fill="red"
+    else
+        heartSvg.style.fill="black"
 
     if(likeValue!='0')
         heart.innerHTML+=likeValue;
@@ -116,16 +95,14 @@ function appendItemToEndorsementListEl(item, like, color){
 
    heart.addEventListener("click", function(){
         const exactLikeLocationinDB = ref(database, `endorsmentList/${likeID}`)
-        const exactColorLocationinDB = ref(database, `endorsmentList/${colorID}`)
 
         if(JSON.parse(localStorage.getItem(likeID))){
-            set(exactLikeLocationinDB, String(Number(likeValue)-1))
-            set(exactColorLocationinDB, "black");
             localStorage.setItem(likeID, "false")
+            set(exactLikeLocationinDB, String(Number(likeValue)-1))
+            
         }else{
-            set(exactLikeLocationinDB, String(Number(likeValue)+1))
-            set(exactColorLocationinDB, "red");
             localStorage.setItem(likeID, "true")
+            set(exactLikeLocationinDB, String(Number(likeValue)+1))            
         }
     })
     
