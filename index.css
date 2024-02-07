@@ -8,18 +8,18 @@ html, body {
 }
 
 img{
-    width: 24%;
+    max-width: 14%;
 }
 
 h1,h2{
     color: white;
+    font-size: 200%;
 }
 
 .container{
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 50%;
     margin: 50px auto;
 }
 
@@ -29,47 +29,48 @@ textarea{
 
 #input-area{
     height:200%;
-    width: 80%;
+    width:600px;
     background: #444059;
-    padding:12px 3%;
+    padding:12px 15px;
     color: #8F8F8F;
     border:none;
     border-radius: 7px;
-    font-size: 22px;
+    font-size: 1.5em;
     margin-bottom: 14px;
 }
 
 .flex-container{
     display: flex;
     gap:10px;
-    width: 86%;
+    width: 630px;
 }
 
 .name-inputs{
     background: #444059;
-    padding:12px 0;
+    padding:12px 15px;
     color: #8F8F8F;
     border:none;
     border-radius: 7px;
-    font-size: 22px;
+    font-size: 1.5em;
     margin-bottom: 20px;
     text-align: center;
     width: 100%;
 }
 
 #publish-btn{
-    font-size: 24px;
+    font-size: 1.5em;
     color: #04131C;
     background: #28A9F1;
-    padding: 20px 35%;
+    padding: 20px 274px;
     border:none;
     border-radius:7px;
     margin-bottom: 24px;
+    font-weight: 700;
 }
 
 ul{
     display: flex;
-    width: 80%;
+    width: 630px;
     justify-content: center;
     margin-bottom: 20px;
     list-style: none;
@@ -80,11 +81,12 @@ ul{
 }
 
 ul li{
-    background-color: white;
+    background-color: #406a7a;
     padding:15px 15px;
     flex-grow:1;
     font-size: 1.5em;
-    text-align: justify;
+    text-align:start;
+    color:white;
 }
 
 #liheader{
@@ -97,4 +99,35 @@ ul li{
     display: flex;
     justify-content: space-between;
     margin-bottom: 0;
+}
+
+@media (max-width:769px){
+    #input-area{
+        width: 95%;
+        padding:12px 5px;
+    }
+    .flex-container{
+        width: 96%;
+    }
+    #publish-btn{
+        padding:20px 43vw;
+    }
+    ul{
+        width: 95%;
+    }
+    ul li{
+        font-size: 1.4em;
+    }
+}
+
+@media(max-width:425px){
+    #publish-btn{
+        padding:20px 37%;
+    }
+}
+
+@media(max-width:320px){
+    #publish-btn{
+        padding:20px 35%;
+    }
 }
